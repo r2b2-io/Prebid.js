@@ -19,8 +19,8 @@ const DEFAULT_ERROR_PATH = 'error';
 const DEFAULT_PROTOCOL = 'https';
 
 const ERROR_MAX = 10;
-const BATCH_SIZE = 10;
-const BATCH_DELAY = 1000;
+const BATCH_SIZE = 50;
+const BATCH_DELAY = 500;
 const REPORTED_URL = getRefererInfo().page || getRefererInfo().topmostLocation;
 
 const START_TIME = Date.now();
@@ -65,6 +65,9 @@ function flushEvents () {
 function processEvent (event) {
   // console.log('process event:', event);
   // console.log(JSON.stringify(event));
+  if (!event) {
+    return
+  }
   eventBuffer.push(event);
   if (flushTimer) {
     clearTimeout(flushTimer);
@@ -154,6 +157,16 @@ function getEventTimestamps (eventName, auctionId) {
 }
 
 function createEvent (name, data, auctionId) {
+  if (!auctionId || !auctionsData[auctionId]) {
+    reportError('No auction data when creating event', {
+      event: name,
+      auctionId: !!auctionId
+    });
+    return null
+  }
+  if (auctionsData[auctionId] && auctionsData[auctionId].empty) {
+    return null
+  }
   return {
     e: name,
     d: data,
@@ -161,15 +174,20 @@ function createEvent (name, data, auctionId) {
   }
 }
 
-function handleAuctionInit (args) {
-  // console.log('auction init:', arguments);
-  const auctionId = args.auctionId;
+function createAuctionData (auction, empty) {
+  const auctionId = auction.auctionId;
   orderedAuctions.push(auctionId);
   auctionsData[auctionId] = {
-    start: args.timestamp,
-    end: null,
-    timeout: args.timeout
+    start: auction.timestamp,
+    end: auction.auctionEnd ? auction.auctionEnd : null,
+    timeout: auction.timeout,
+    empty: !!empty
   };
+}
+function handleAuctionInit (args) {
+  // console.log('auction init:', arguments);
+  createAuctionData(args);
+  const auctionId = args.auctionId;
   const bidderRequests = args.bidderRequests || [];
   const data = {
     o: orderedAuctions.length,
@@ -233,6 +251,10 @@ function handleNoBid (args) {
 }
 function handleBidResponse (args) {
   // console.log('bid response:', arguments);
+  bidsData[args.adId] = {
+    id: args.requestId,
+    auctionId: args.auctionId
+  };
   const data = {
     b: args.bidder,
     u: args.adUnitCode,
@@ -257,23 +279,6 @@ function handleBidRejected (args) {
     r: args.rejectionReason
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.BID_REJECTED], data, args.auctionId);
-  processEvent(event);
-}
-function handleBidderError (args) {
-  // console.log('bidder error:', arguments);
-  const {bidderRequest} = args;
-  const data = {
-    b: bidderRequest.bidderCode,
-    u: bidderRequest.bids.reduce((result, bid) => {
-      if (!result[bid.adUnitCode]) {
-        result[bid.adUnitCode] = 1
-      } else {
-        result[bid.adUnitCode]++
-      }
-      return result
-    }, {})
-  };
-  const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.BIDDER_ERROR], data, bidderRequest.auctionId);
   processEvent(event);
 }
 function handleBidderDone (args) {
@@ -303,16 +308,25 @@ function getAuctionUnitsData (auctionObject) {
   }, unitsData);
   return unitsData
 }
+function handleEmptyAuction(auction) {
+  let auctionId = auction.auctionId;
+  if (!auctionsData[auctionId]) {
+    createAuctionData(auction, true);
+  }
+}
 function handleAuctionEnd (args) {
   // console.log('auction end:', arguments);
+  if (!args.bidderRequests.length) {
+    handleEmptyAuction(args);
+    return
+  }
   auctionsData[args.auctionId].end = args.auctionEnd;
-  const winningBids = getGlobal().getHighestCpmBids() || [];
+  let winningBids = getGlobal().getHighestCpmBids() || [];
+  if (winningBids.length === 0) {
+    winningBids = getGlobal().getAllWinningBids() || [];
+  }
   const wins = [];
   winningBids.forEach((bid) => {
-    bidsData[bid.adId] = {
-      id: bid.requestId,
-      auctionId: bid.auctionId
-    }
     if (bid.auctionId === args.auctionId) {
       wins.push({
         b: bid.bidder,
@@ -480,9 +494,6 @@ let r2b2Analytics = Object.assign({}, baseAdapter, {
           break;
         case CONSTANTS.EVENTS.BID_REJECTED:
           handleBidRejected(args)
-          break;
-        case CONSTANTS.EVENTS.BIDDER_ERROR:
-          handleBidderError(args)
           break;
         case CONSTANTS.EVENTS.BIDDER_DONE:
           handleBidderDone(args)
