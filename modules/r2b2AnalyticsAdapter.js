@@ -62,6 +62,16 @@ function flushEvents () {
   eventBuffer = [];
   reportEvents(events)
 }
+
+export function resetAnalyticAdapter(){
+  orderedAuctions = [];
+  auctionsData = {};
+  bidsData = {};
+  adServerCurrency = '';
+  clearTimeout(flushTimer);
+  eventBuffer = [];
+  errors = [];
+}
 function processEvent (event) {
   // console.log('process event:', event);
   // console.log(JSON.stringify(event));
