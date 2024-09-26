@@ -71,6 +71,11 @@ export function resetAnalyticAdapter(){
   clearTimeout(flushTimer);
   eventBuffer = [];
   errors = [];
+
+  WEBSITE = 0;
+  CONFIG_ID = 0;
+  CONFIG_VERSION = 0;
+  LOG_SERVER = DEFAULT_SERVER;
 }
 function processEvent (event) {
   // console.log('process event:', event);
