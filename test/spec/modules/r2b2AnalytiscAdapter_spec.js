@@ -501,6 +501,7 @@ describe('r2b2 Analytics', function () {
         expect(initEvents.length).to.be.equal(1);
         let initEvent = initEvents[0];
         expect(initEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           u: {
             [AD_UNIT_1_CODE]: ["r2b2", "adf"],
             [AD_UNIT_2_CODE]: ["r2b2", "stroeerCore"]
@@ -544,6 +545,7 @@ describe('r2b2 Analytics', function () {
         let r2b2BidRequest = bidRequestedEvents[0];
         let adformBidRequest = bidRequestedEvents[1];
         expect(r2b2BidRequest.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: {
             [AD_UNIT_1_CODE]: 1,
@@ -551,6 +553,7 @@ describe('r2b2 Analytics', function () {
           }
         });
         expect(adformBidRequest.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "adf",
           u: {[AD_UNIT_1_CODE]: 1}
         });
@@ -573,6 +576,7 @@ describe('r2b2 Analytics', function () {
         expect(noBidEvents.length).to.be.equal(1);
         let noBidEvent = noBidEvents[0];
         expect(noBidEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_1_CODE
         });
@@ -595,6 +599,7 @@ describe('r2b2 Analytics', function () {
         expect(timeoutEvents.length).to.be.equal(1);
         let timeoutEvent = timeoutEvents[0];
         expect(timeoutEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           r2b2: {[AD_UNIT_1_CODE]: 2}
         });
 
@@ -615,7 +620,7 @@ describe('r2b2 Analytics', function () {
         let bidderDoneEvents= getPrebidEventsByName(events, "bidderDone");
         expect(bidderDoneEvents.length).to.be.equal(1);
         let bidderDoneEvent = bidderDoneEvents[0];
-        expect(bidderDoneEvent.d).to.be.deep.equal({ b: "r2b2"});
+        expect(bidderDoneEvent.d).to.be.deep.equal({ ai: AUCTION_ID, b: "r2b2"});
 
         done();
       }, 500);
@@ -635,6 +640,7 @@ describe('r2b2 Analytics', function () {
         expect(auctionEndEvents.length).to.be.equal(1);
         let auctionEnd = auctionEndEvents[0];
         expect(auctionEnd.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           wins:[{
             b: "r2b2",
             u: AD_UNIT_2_CODE,
@@ -667,6 +673,7 @@ describe('r2b2 Analytics', function () {
         expect(bidResponseEvents.length).to.be.equal(1);
         let bidResponseEvent = bidResponseEvents[0];
         expect(bidResponseEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           p: 1.5,
@@ -699,6 +706,7 @@ describe('r2b2 Analytics', function () {
         expect(rejectedBidsEvents.length).to.be.equal(1);
         let rejectedBidEvent = rejectedBidsEvents[0];
         expect(rejectedBidEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           p: 1.5,
@@ -724,6 +732,7 @@ describe('r2b2 Analytics', function () {
         expect(bidWonEvents.length).to.be.equal(1);
         let bidWonEvent = bidWonEvents[0];
         expect(bidWonEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           p: 1.5,
@@ -762,6 +771,7 @@ describe('r2b2 Analytics', function () {
         expect(bidWonEvents.length).to.be.equal(1);
         let bidWonEvent = bidWonEvents[0];
         expect(bidWonEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           p: 1.5,
@@ -797,6 +807,7 @@ describe('r2b2 Analytics', function () {
         let setTargetingEvents= getPrebidEventsByName(events, "targeting");
         expect(setTargetingEvents.length).to.be.equal(1);
         expect(setTargetingEvents[0].d).to.be.deep.equal({
+          ai: AUCTION_ID,
           u: {
             [AD_UNIT_2_CODE]: {
               b: "r2b2",
@@ -826,6 +837,7 @@ describe('r2b2 Analytics', function () {
         expect(setTargetingEvents.length).to.be.equal(1);
         let setTargeting = setTargetingEvents[0];
         expect(setTargeting.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           p: 1.5,
@@ -853,6 +865,7 @@ describe('r2b2 Analytics', function () {
         expect(renderFailedEvents.length).to.be.equal(1);
         let renderFailed = renderFailedEvents[0];
         expect(renderFailed.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           p: 1.5,
@@ -878,6 +891,7 @@ describe('r2b2 Analytics', function () {
         expect(staleRenderEvents.length).to.be.equal(1);
         let staleRenderEvent = staleRenderEvents[0];
         expect(staleRenderEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           p: 1.5,
@@ -910,6 +924,7 @@ describe('r2b2 Analytics', function () {
         expect(bidViewableEvents.length).to.be.equal(1);
         let bidViewableEvent = bidViewableEvents[0];
         expect(bidViewableEvent.d).to.be.deep.equal({
+          ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           rt: 50

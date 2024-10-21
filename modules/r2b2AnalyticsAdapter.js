@@ -182,6 +182,10 @@ function createEvent (name, data, auctionId) {
   if (auctionsData[auctionId] && auctionsData[auctionId].empty) {
     return null
   }
+
+  data = data || {};
+  data.ai = auctionId;
+
   return {
     e: name,
     d: data,
