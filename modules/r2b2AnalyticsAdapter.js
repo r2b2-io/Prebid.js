@@ -283,7 +283,8 @@ function handleBidResponse (args) {
     oc: args.originalCurrency,
     sz: args.size,
     st: args.status,
-    rt: args.timeToRespond
+    rt: args.timeToRespond,
+    bi: args.adId,
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.BID_RESPONSE], data, args.auctionId);
   processEvent(event);
@@ -295,7 +296,8 @@ function handleBidRejected (args) {
     u: args.adUnitCode,
     p: args.cpm,
     c: args.currency,
-    r: args.rejectionReason
+    r: args.rejectionReason,
+    bi: args.adId,
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.BID_REJECTED], data, args.auctionId);
   processEvent(event);
@@ -353,6 +355,7 @@ function handleAuctionEnd (args) {
         p: bid.cpm,
         c: bid.currency,
         sz: bid.size,
+        bi: bid.adId,
       })
     }
   });
@@ -383,7 +386,8 @@ function handleBidWon (args) {
     sz: args.size,
     mt: args.mediaType,
     at: getStandardTargeting(args.adserverTargeting),
-    o: orderedAuctions.length
+    o: orderedAuctions.length,
+    bi: args.adId,
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.BID_WON], data, args.auctionId);
   processEvent(event);
@@ -415,7 +419,8 @@ function handleStaleRender (args) {
     b: args.bidder,
     u: args.adUnitCode,
     p: args.cpm,
-    c: args.currency
+    c: args.currency,
+    bi: args.adId,
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.STALE_RENDER], data, args.auctionId);
   processEvent(event);
@@ -430,7 +435,8 @@ function handleRenderSuccess (args) {
     p: bid.cpm,
     c: bid.currency,
     sz: bid.size,
-    mt: bid.mediaType
+    mt: bid.mediaType,
+    bi: bid.adId,
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.AD_RENDER_SUCCEEDED], data, bid.auctionId);
   processEvent(event);
@@ -443,7 +449,8 @@ function handleRenderFailed (args) {
     u: bid.adUnitCode,
     p: bid.cpm,
     c: bid.currency,
-    r: reason
+    r: reason,
+    bi: bid.adId,
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.AD_RENDER_FAILED], data, bid.auctionId);
   processEvent(event);
@@ -454,7 +461,8 @@ function handleBidViewable (args) {
   const data = {
     b: args.bidder,
     u: args.adUnitCode,
-    rt: Date.now() - renderTime
+    rt: Date.now() - renderTime,
+    bi: args.adId,
   };
   const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.BID_VIEWABLE], data, args.auctionId);
   processEvent(event);

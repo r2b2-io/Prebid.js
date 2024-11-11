@@ -15,7 +15,6 @@ const {
      }
 } = CONSTANTS;
 
-
 const BANNER_SETTING_1 = { "sizes": [[300, 300],[300, 250]]};
 const BANNER_SETTING_2 = {"sizes": [[320, 150], [320, 50]]};
 
@@ -25,6 +24,7 @@ const R2B2_PID_1 = "test.cz/s2s/300x300/mobile";
 const R2B2_PID_2 = "test.cz/s2s/320x150/mobile";
 const AD_UNIT_1_TID = "0b3464bb-d80a-490e-8367-a65201a37ba3"
 const AD_UNIT_2_TID = "c8c3643c-9de0-43ea-bcd6-cc0072ec9b45";
+const AD_UNIT_2_AD_ID = "22c828c62d44da5";
 const AD_UNIT_1 = {
     "code": AD_UNIT_1_CODE,
     "mediaTypes": {
@@ -173,7 +173,7 @@ const R2B2_AD_UNIT_2_BID = {
   "size": "300x100",
   "adserverTargeting": {
     "hb_bidder": "r2b2",
-    "hb_adid": "22c828c62d44da5",
+    "hb_adid": AD_UNIT_2_AD_ID,
     "hb_pb": "0.20",
     "hb_size": "300x100",
     "hb_source": "client",
@@ -645,7 +645,8 @@ describe('r2b2 Analytics', function () {
             b: "r2b2",
             u: AD_UNIT_2_CODE,
             p: 1.5, c: "USD",
-            sz: "300x100"
+            sz: "300x100",
+            bi: R2B2_AD_UNIT_2_BID.adId,
           }],
           u: {[AD_UNIT_2_CODE]: {b: {r2b2: 1}}},
           o: 1,
@@ -654,6 +655,23 @@ describe('r2b2 Analytics', function () {
           rjc: 0,
           brc: 4
         });
+
+        done();
+      }, 500);
+
+      clock.tick(500);
+    });
+
+    it("auction end empty auction", (done) => {
+      let noBidderRequestsEnd = utils.deepClone(MOCK.AUCTION_END);
+      noBidderRequestsEnd.bidderRequests = [];
+
+      fireEvents([
+        [AUCTION_END, noBidderRequestsEnd]
+      ]);
+
+      setTimeout(() => {
+        expect(ajaxStub.calledOnce).to.be.false;
 
         done();
       }, 500);
@@ -682,7 +700,8 @@ describe('r2b2 Analytics', function () {
           oc: "USD",
           sz: "300x100",
           st: 1,
-          rt: 854
+          rt: 854,
+          bi: R2B2_AD_UNIT_2_BID.adId,
         });
 
         done();
@@ -711,7 +730,8 @@ describe('r2b2 Analytics', function () {
           u: AD_UNIT_2_CODE,
           p: 1.5,
           c: "USD",
-          r: CONSTANTS.REJECTION_REASON.FLOOR_NOT_MET
+          r: CONSTANTS.REJECTION_REASON.FLOOR_NOT_MET,
+          bi: R2B2_AD_UNIT_2_BID.adId,
         });
 
         done();
@@ -747,7 +767,8 @@ describe('r2b2 Analytics', function () {
             pb: "0.20",
             fmt: "banner"
           },
-          o: 1
+          o: 1,
+          bi: R2B2_AD_UNIT_2_BID.adId,
         });
 
         done();
@@ -786,7 +807,8 @@ describe('r2b2 Analytics', function () {
             pb: "",
             fmt: ""
           },
-          o: 1
+          o: 1,
+          bi: R2B2_AD_UNIT_2_BID.adId,
         });
 
         done();
@@ -843,7 +865,8 @@ describe('r2b2 Analytics', function () {
           p: 1.5,
           c: "USD",
           sz: "300x100",
-          mt: "banner"
+          mt: "banner",
+          bi: R2B2_AD_UNIT_2_BID.adId,
         });
 
         done();
@@ -870,7 +893,8 @@ describe('r2b2 Analytics', function () {
           u: AD_UNIT_2_CODE,
           p: 1.5,
           c: "USD",
-          r: CONSTANTS.AD_RENDER_FAILED_REASON.CANNOT_FIND_AD
+          r: CONSTANTS.AD_RENDER_FAILED_REASON.CANNOT_FIND_AD,
+          bi: R2B2_AD_UNIT_2_BID.adId,
         });
 
         done();
@@ -896,6 +920,7 @@ describe('r2b2 Analytics', function () {
           u: AD_UNIT_2_CODE,
           p: 1.5,
           c: "USD",
+          bi: R2B2_AD_UNIT_2_BID.adId,
         });
 
         done();
@@ -927,7 +952,8 @@ describe('r2b2 Analytics', function () {
           ai: AUCTION_ID,
           b: "r2b2",
           u: AD_UNIT_2_CODE,
-          rt: 50
+          rt: 50,
+          bi: R2B2_AD_UNIT_2_BID.adId
         });
 
         done();
