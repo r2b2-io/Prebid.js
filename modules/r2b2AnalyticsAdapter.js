@@ -243,7 +243,7 @@ function handleBidTimeout (args) {
   // console.log('bid timeout:', arguments);
   const auctionId = args.length ? args[0].auctionId : null;
   if (auctionId) {
-    const data = args.reduce((result, bid) => {
+    let bidders = args.reduce((result, bid) => {
       if (!result[bid.bidder]) {
         result[bid.bidder] = {}
       }
@@ -255,6 +255,10 @@ function handleBidTimeout (args) {
       }
       return result
     }, {});
+
+    const data = {
+      b: bidders,
+    }
     const event = createEvent(EVENT_MAP[CONSTANTS.EVENTS.BID_TIMEOUT], data, auctionId);
     processEvent(event);
   }

@@ -600,7 +600,9 @@ describe('r2b2 Analytics', function () {
         let timeoutEvent = timeoutEvents[0];
         expect(timeoutEvent.d).to.be.deep.equal({
           ai: AUCTION_ID,
-          r2b2: {[AD_UNIT_1_CODE]: 2}
+          b: {
+            r2b2: {[AD_UNIT_1_CODE]: 2}
+          }
         });
 
         done();
