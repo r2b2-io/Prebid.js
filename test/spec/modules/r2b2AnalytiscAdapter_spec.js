@@ -648,7 +648,7 @@ describe('r2b2 Analytics', function () {
             u: AD_UNIT_2_CODE,
             p: 1.5, c: "USD",
             sz: "300x100",
-            bi: R2B2_AD_UNIT_2_BID.adId,
+            bi: R2B2_AD_UNIT_2_BID.requestId,
           }],
           u: {[AD_UNIT_2_CODE]: {b: {r2b2: 1}}},
           o: 1,
@@ -703,7 +703,7 @@ describe('r2b2 Analytics', function () {
           sz: "300x100",
           st: 1,
           rt: 854,
-          bi: R2B2_AD_UNIT_2_BID.adId,
+          bi: R2B2_AD_UNIT_2_BID.requestId,
         });
 
         done();
@@ -733,7 +733,7 @@ describe('r2b2 Analytics', function () {
           p: 1.5,
           c: "USD",
           r: CONSTANTS.REJECTION_REASON.FLOOR_NOT_MET,
-          bi: R2B2_AD_UNIT_2_BID.adId,
+          bi: R2B2_AD_UNIT_2_BID.requestId,
         });
 
         done();
@@ -770,7 +770,7 @@ describe('r2b2 Analytics', function () {
             fmt: "banner"
           },
           o: 1,
-          bi: R2B2_AD_UNIT_2_BID.adId,
+          bi: R2B2_AD_UNIT_2_BID.requestId,
         });
 
         done();
@@ -810,7 +810,7 @@ describe('r2b2 Analytics', function () {
             fmt: ""
           },
           o: 1,
-          bi: R2B2_AD_UNIT_2_BID.adId,
+          bi: R2B2_AD_UNIT_2_BID.requestId,
         });
 
         done();
@@ -868,7 +868,7 @@ describe('r2b2 Analytics', function () {
           c: "USD",
           sz: "300x100",
           mt: "banner",
-          bi: R2B2_AD_UNIT_2_BID.adId,
+          bi: R2B2_AD_UNIT_2_BID.requestId,
         });
 
         done();
@@ -896,7 +896,7 @@ describe('r2b2 Analytics', function () {
           p: 1.5,
           c: "USD",
           r: CONSTANTS.AD_RENDER_FAILED_REASON.CANNOT_FIND_AD,
-          bi: R2B2_AD_UNIT_2_BID.adId,
+          bi: R2B2_AD_UNIT_2_BID.requestId,
         });
 
         done();
@@ -922,7 +922,7 @@ describe('r2b2 Analytics', function () {
           u: AD_UNIT_2_CODE,
           p: 1.5,
           c: "USD",
-          bi: R2B2_AD_UNIT_2_BID.adId,
+          bi: R2B2_AD_UNIT_2_BID.requestId,
         });
 
         done();
@@ -955,7 +955,7 @@ describe('r2b2 Analytics', function () {
           b: "r2b2",
           u: AD_UNIT_2_CODE,
           rt: 50,
-          bi: R2B2_AD_UNIT_2_BID.adId
+          bi: R2B2_AD_UNIT_2_BID.requestId
         });
 
         done();
